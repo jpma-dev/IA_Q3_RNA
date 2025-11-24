@@ -110,21 +110,24 @@ async function predict() {
     const disp = Number(document.getElementById("displacement").value);
 
     if (isNaN(hp) || isNaN(disp)) {
-        alert("Ingrese valores numéricos válidos");
+        alert("Ingrese valores válidos.");
         return;
     }
 
-    // Construcción correcta del tensor
-    const input = tf.tensor2d([[hp, disp]]); 
+    const resultSpan = document.getElementById("result");
 
-    // Predecir
-    const output = model.predict(input);
-
-    output.data().then(pred => {
-        const prob = pred[0];
-        const result = prob > 0.5 ? "La motocicleta tendrá precio Caro" : "La motocicleta tendrá precio Barato";
-        document.getElementById("result").innerText = result;
+    // Usar tf.tidy para evitar que TensorFlow.js "congele" el primer resultado
+    const prob = await tf.tidy(() => {
+        const input = tf.tensor2d([[hp, disp]]);
+        const output = model.predict(input);
+        return output.data();
     });
+
+    const prediction = prob[0] > 0.5 ? 
+        "La motocicleta tendrá precio Caro" : 
+        "La motocicleta tendrá precio Barato";
+
+    resultSpan.innerText = prediction;
 }
 
 window.onload = () => {
