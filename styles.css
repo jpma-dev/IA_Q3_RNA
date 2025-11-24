@@ -1,0 +1,128 @@
+* {
+    font-family: "Lato", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    color: #2D2D2D;
+}
+
+body {
+    background: #F9F9F9;
+    height: 100vh;
+    display: flex;
+}
+
+.rnApp__main {
+    width: 100%;
+    max-width: 500px;
+    background: #FFFFFF;
+    margin: auto;
+    padding: 1rem 2rem;
+    border-radius: 24px;
+}
+
+.rnApp__main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    box-shadow: 0 4px 10px 0 rgba(0,0,0,.1);
+}
+
+.rnApp__section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+}
+
+.rnApp__section:first-child {
+    border-bottom: 1px dashed #D9D9D9;
+}
+
+.rnApp__title {
+    font-weight: bolder;
+    margin: 0;
+}
+
+.rnApp__subtitle {
+    font-weight: bold;
+    margin: 0;
+}
+
+.rnApp__row {
+    display: flex;
+    justify-content: baseline;
+    align-items: center;
+    gap: 8px;
+}
+
+.rnApp__wrapper {
+    display: flex;
+    width: 50%;
+}
+
+.rnApp__wrapper:first-child {
+    justify-content: end;
+}
+
+.rnApp__label {
+    text-align: end;
+    display: inline-block;
+}
+
+.rnApp__input {
+    border: 1px solid #C7C7C7;
+    background: #EDEDED;
+    border-radius: 8px;
+    padding: .5rem 1rem;
+}
+
+.rnApp__button {
+    border: none;
+    border-radius: 16px;
+    padding: 1rem 2rem;
+    font-weight: bold;
+    font-size: 16px;
+    color: #2D2D2D;
+    background: #66E3C1;
+    transition: all .25s linear;
+}
+
+.rnApp__button:hover {
+    cursor: pointer;
+    color: #FFFFFF;
+    background: #FF7559;
+}
+
+.rnApp__result {
+    color: #9E9E9E;
+    font-weight: bold;
+    border: 1px dashed #9E9E9E;
+    font-size: 24px;
+    padding: 1rem 2rem;
+    border-radius: 16px;
+}
+
+/* Ocultar secciones */
+.hidden {
+    display: none !important;
+}
+
+/* Loader animado */
+.loader {
+    border: 6px solid #E5E5E5;
+    border-top: 6px solid #FF7559;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 0.8s linear infinite;
+    margin-bottom: 10px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

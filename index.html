@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Bike Price Classifier</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.20.0"></script>
+    <script defer src="script.js"></script>
+</head>
+
+<body>
+    <main class="rnApp__main">
+
+        <!-- HEADER -->
+        <section id="header" class="rnApp__section">
+            <h1 class="rnApp__title">Clasificador de Precios de Motos</h1>
+
+            <!-- Loader -->
+            <div id="loader" class="loader"></div>
+
+            <p id="status"></p>
+        </section>
+
+        <!-- FORMULARIO (OCULTO HASTA TERMINAR EL ENTRENAMIENTO) -->
+        <section id="controls" class="rnApp__section hidden">
+            <h2 class="rnApp__subtitle">Realizar predicción</h2>
+            <div class="rnApp__row">
+                <div class="rnApp__wrapper">
+                    <label for="hp" class="rnApp__label">Power (HP):</label>
+                </div>
+                <div class="rnApp__wrapper">
+                    <input type="number" id="hp" class="rnApp__input" />
+                </div>
+            </div>
+
+            <div class="rnApp__row">
+                <div class="rnApp__wrapper">
+                    <label for="displacement" class="rnApp__label">Displacement (ccm):</label>
+                </div>
+                <div class="rnApp__wrapper">
+                    <input type="number" id="displacement" class="rnApp__input" />
+                </div>
+            </div>
+
+            <button class="rnApp__button" onclick="predict()">Predecir precio</button>
+        </section>
+
+        <section id="results" class="rnApp__section">
+            <span id="result" class="rnApp__result"></span>
+        </section>
+
+    </main>
+</body>
+
+</html>
