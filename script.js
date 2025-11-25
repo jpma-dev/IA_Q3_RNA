@@ -1,4 +1,5 @@
 let model;
+let hpMean, hpStd, dispMean, dispStd;
 
 // Cargar CSV
 async function loadData() {
@@ -34,11 +35,11 @@ async function loadData() {
             !isNaN(price) && price > 0
         );
     })
-    .map(d => ({
-        hp: Number(d["Power(HP)"]),
-        disp: Number(d["Displacement(ccm)"]),
-        label: Number(d["Price(USD)"]) > 6000 ? 1 : 0
-    }));
+        .map(d => ({
+            hp: Number(d["Power(HP)"]),
+            disp: Number(d["Displacement(ccm)"]),
+            label: Number(d["Price(USD)"]) > 6000 ? 1 : 0
+        }));
 
     console.log("Registros originales:", raw.length);
     console.log("Registros limpios:", clean.length);
@@ -78,7 +79,21 @@ async function trainModel() {
     const xs = dataset.map(d => [d.hp, d.disp]);
     const ys = dataset.map(d => d.label);
 
-    const xsTensor = tf.tensor2d(xs);
+    // Calcular medias y desviaciones
+    const hpValues = xs.map(d => d[0]);  // Power
+    const dispValues = xs.map(d => d[1]); // Displacement
+
+    hpMean = tf.mean(hpValues).arraySync();
+    hpStd = tf.moments(tf.tensor1d(hpValues)).variance.sqrt().arraySync();
+
+    dispMean = tf.mean(dispValues).arraySync();
+    dispStd = tf.moments(tf.tensor1d(dispValues)).variance.sqrt().arraySync();
+
+    // Normalizar
+    const xsTensor = tf.tensor2d(xs)
+        .sub([hpMean, dispMean])
+        .div([hpStd, dispStd]);
+
     const ysTensor = tf.tensor1d(ys);
 
     createModel();
@@ -86,7 +101,7 @@ async function trainModel() {
     status.innerText = "Entrenando modelo...";
 
     await model.fit(xsTensor, ysTensor, {
-        epochs: 20,
+        epochs: 30,
         batchSize: 16,
         shuffle: true,
         callbacks: {
@@ -118,13 +133,15 @@ async function predict() {
 
     // Usar tf.tidy para evitar que TensorFlow.js "congele" el primer resultado
     const prob = await tf.tidy(() => {
-        const input = tf.tensor2d([[hp, disp]]);
+        const input = tf.tensor2d([[hp, disp]])
+            .sub([hpMean, dispMean])
+            .div([hpStd, dispStd]);
         const output = model.predict(input);
         return output.data();
     });
 
-    const prediction = prob[0] > 0.5 ? 
-        "La motocicleta tendrá precio Caro" : 
+    const prediction = prob[0] > 0.5 ?
+        "La motocicleta tendrá precio Caro" :
         "La motocicleta tendrá precio Barato";
 
     resultSpan.innerText = prediction;
